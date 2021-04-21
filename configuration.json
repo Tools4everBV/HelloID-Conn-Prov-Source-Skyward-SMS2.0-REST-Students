@@ -1,0 +1,32 @@
+[
+    {
+      "key": "Url",
+      "type": "input",
+      "defaultValue": "",
+      "templateOptions": {
+        "label": "URL",
+        "required": true
+      }
+    },
+    {
+      "key": "Key",
+      "type": "input",
+      "defaultValue": "",
+      "templateOptions": {
+        "label": "Key",
+        "type": "password",
+        "required": true
+      }
+    },
+    {
+      "key": "Password",
+      "type": "input",
+      "defaultValue": "",
+      "templateOptions": {
+        "label": "Secret",
+        "type": "password",
+        "required": true
+      }
+    }
+  ]
+  
