@@ -2,6 +2,18 @@
 $config = ConvertFrom-Json $configuration;
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 
+function Get-NextPageLink {
+    Param (
+        [string]$Link
+    ) 
+    if ($null -ne $Link -and "" -ne $Link) {
+        return $Link.TrimStart('<').Remove($Link.LastIndexOf('>')).TrimEnd('>').Replace('cursor', 'paging.cursor');
+    }
+    else {
+        return $null;
+    }
+}
+
 #Build access token request
 $tokenRequestUri = $config.Url + "/token";
 
@@ -31,14 +43,8 @@ do {
     $studentsResponse = Invoke-RestMethod -Method GET -Uri $studentsUri -Headers $authorization -ResponseHeadersVariable 'responseHeaders' -TimeoutSec 300;
     
     $students += $studentsResponse;
-
-    if ($null -ne $responseHeaders.link) {
-        $link = $responseHeaders.link;
-        $studentsUri = $link.TrimStart('<').Remove($link.LastIndexOf('>')).TrimEnd('>').Replace('cursor', 'paging.cursor');
-    }
-    else {
-        $studentsUri = $null;
-    }
+    
+    $studentsUri = Get-NextPageLink -Link $responseHeaders.link;
 }
 while ($null -ne $studentsUri)
 
@@ -52,13 +58,7 @@ do {
     
     $schools += $schoolsResponse;
 
-    if ($null -ne $responseHeaders.link) {
-        $link = $responseHeaders.link;
-        $schoolsUri = $link.TrimStart('<').Remove($link.LastIndexOf('>')).TrimEnd('>').Replace('cursor', 'paging.cursor');
-    }
-    else {
-        $schoolsUri = $null;
-    }
+    $schoolsUri = Get-NextPageLink -Link $responseHeaders.link;
 }
 while ($null -ne $schoolsUri)
 
@@ -83,14 +83,8 @@ foreach ($student in $students) {
         $enrollmentsResponse = Invoke-RestMethod -Method GET -Uri $enrollmentsUri -Headers $authorization -ResponseHeadersVariable 'responseHeaders' -TimeoutSec 300;
 
         $enrollments += $enrollmentsResponse;
-
-        if ($null -ne $responseHeaders.link) {
-            $link = $responseHeaders.link;
-            $enrollmentsUri = $link.TrimStart('<').Remove($link.LastIndexOf('>')).TrimEnd('>').Replace('cursor', 'paging.cursor');
-        }
-        else {
-            $enrollmentsUri = $null;
-        }
+        
+        $enrollmentsUri = Get-NextPageLink -Link $responseHeaders.link;
     }
     while ($null -ne $enrollmentsUri)
 

@@ -2,6 +2,18 @@
 $config = ConvertFrom-Json $configuration;
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 
+function Get-NextPageLink {
+    Param (
+        [string]$Link
+    ) 
+    if ($null -ne $Link -and "" -ne $Link) {
+        return $Link.TrimStart('<').Remove($Link.LastIndexOf('>')).TrimEnd('>').Replace('cursor', 'paging.cursor');
+    }
+    else {
+        return $null;
+    }
+}
+
 #Build access token request
 $tokenRequestUri = $config.Url + "/token";
 
@@ -31,14 +43,8 @@ do {
     $schoolsResponse = Invoke-RestMethod -Method GET -Uri $schoolsUri -Headers $authorization -ResponseHeadersVariable 'responseHeaders' -TimeoutSec 300;
     
     $schools += $schoolsResponse;
-
-    if ($null -ne $responseHeaders.link) {
-        $link = $responseHeaders.link;
-        $schoolsUri = $link.TrimStart('<').Remove($link.LastIndexOf('>')).TrimEnd('>').Replace('cursor', 'paging.cursor');
-    }
-    else {
-        $schoolsUri = $null;
-    }
+    
+    $schoolsUri = Get-NextPageLink -Link $responseHeaders.link;
 }
 while ($null -ne $schoolsUri)
 
