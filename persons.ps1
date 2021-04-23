@@ -2,7 +2,7 @@
 $config = ConvertFrom-Json $configuration;
 [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12;
 
-function Process-NextPageLink {
+function Get-NextPageLink {
     Param (
         [string]$Link
     ) 
@@ -44,7 +44,7 @@ do {
     
     $students += $studentsResponse.Content | ConvertFrom-Json;
 
-    $studentsUri = Process-NextPageLink -Link $studentsResponse.Headers['Link'];
+    $studentsUri = Get-NextPageLink -Link $studentsResponse.Headers['Link'];
 }
 while ($null -ne $studentsUri)
 
@@ -58,7 +58,7 @@ do {
     
     $schools += $schoolsResponse.Content | ConvertFrom-Json;
 
-    $schoolsUri = Process-NextPageLink -Link $schoolsResponse.Headers['Link'];
+    $schoolsUri = Get-NextPageLink -Link $schoolsResponse.Headers['Link'];
 }
 while ($null -ne $schoolsUri)
 
@@ -84,7 +84,7 @@ foreach ($student in $students) {
 
         $enrollments += $enrollmentsResponse | ConvertFrom-Json;
 
-        $enrollmentsUri = Process-NextPageLink -Link $enrollmentsResponse.Headers['Link'];
+        $enrollmentsUri = Get-NextPageLink -Link $enrollmentsResponse.Headers['Link'];
     }
     while ($null -ne $enrollmentsUri)
 
