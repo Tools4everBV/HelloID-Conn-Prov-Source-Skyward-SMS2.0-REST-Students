@@ -88,6 +88,23 @@ foreach ($student in $students) {
     }
     while ($null -ne $enrollmentsUri)
 
+    #Add dummy contract for users with no enrollments
+    if ($enrollments.Count -eq 0) {
+        $dummyEnrollment = @{
+            'EnrollmentId' = $null
+            'CourseId' = $null
+            'SectionId' = $null
+            'SchoolId' = $null
+            'NameId' = $null
+            'EnrType' = $null
+            'EnrStatus' = $null
+            'StartDate' = '0001-01-01T00:00:00'
+            'EndDate' = '0001-01-01T023:59:999'
+            'ExternalId' = $student.NameId
+        };
+        $enrollments += $dummyEnrollment;
+    }
+
    $enrollments | Add-Member -Name "ExternalId" -Value $student.NameId -MemberType NoteProperty;
    $person | Add-Member -Name "Contracts" -Value $enrollments -MemberType NoteProperty;
    
