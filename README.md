@@ -11,3 +11,6 @@ If you get the following error:
 > The response content cannot be parsed because the Internet Explorer engine is not available, or Internet Explorer's first-launch configuration is not complete. Specify the UseBasicParsing parameter and try again.
 
 Please start Internet Explorer on the HelloID service machine and complete the configuration settings pop up.
+
+# HelloID Docs
+The official HelloID documentation can be found at: https://docs.helloid.com/
