@@ -1,4 +1,10 @@
 # HelloID-Conn-Prov-Source-Skyward-SMS2.0-REST-Students
+
+| :information_source: Information |
+|:---------------------------|
+| This repository contains the connector and configuration code only. The implementer is responsible to acquire the connection details such as username, password, certificate, etc. You might even need to sign a contract or agreement with the supplier before implementing this connector. Please contact the client's application manager to coordinate the connector requirements.       |
+
+<br />
  
 This connector allows you to retrieve users from Skyward SMS 2.0 via the REST API.
 
